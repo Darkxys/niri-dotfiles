@@ -5,6 +5,10 @@ repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 backup_root="${BACKUP_ROOT:-/etc/sddm.pre-stow/$(date +%Y%m%d-%H%M%S)}"
 silent_repo="${SILENT_SDDM_REPO:-https://github.com/uiriansan/SilentSDDM.git}"
 silent_ref="${SILENT_SDDM_REF:-main}"
+silent_config="${SILENT_SDDM_CONFIG:-rei}"
+silent_config="${silent_config#configs/}"
+silent_config="${silent_config%.conf}"
+silent_config_file="configs/${silent_config}.conf"
 theme_dir="/usr/share/sddm/themes/silent"
 work_dir="$(mktemp -d)"
 
@@ -79,6 +83,20 @@ sudo rsync -a --delete \
 	--exclude 'default.nix' \
 	--exclude 'nix' \
 	"$work_dir/SilentSDDM/" "$theme_dir/"
+
+if [ ! -f "$theme_dir/$silent_config_file" ]; then
+	printf 'SilentSDDM config not found: %s\n' "$silent_config_file" >&2
+	printf 'Available configs:\n' >&2
+	find "$theme_dir/configs" -maxdepth 1 -type f -name '*.conf' -printf '  %f\n' | sort >&2
+	exit 1
+fi
+
+if sudo grep -q '^ConfigFile=' "$theme_dir/metadata.desktop"; then
+	sudo sed -i "s|^ConfigFile=.*|ConfigFile=$silent_config_file|" "$theme_dir/metadata.desktop"
+else
+	printf '\nConfigFile=%s\n' "$silent_config_file" | sudo tee -a "$theme_dir/metadata.desktop" >/dev/null
+fi
+printf 'Selected SilentSDDM config: %s\n' "$silent_config_file"
 
 if [ -d "$theme_dir/fonts" ]; then
 	sudo mkdir -p /usr/share/fonts

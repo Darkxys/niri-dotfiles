@@ -81,21 +81,27 @@ Re-apply links after moving files around:
 
 The SDDM login screen is installed separately because it writes to `/etc` and
 `/usr/share`. The installer fetches `uiriansan/SilentSDDM` from upstream, copies
-it to `/usr/share/sddm/themes/silent`, and stows this repo's small SDDM config:
+it to `/usr/share/sddm/themes/silent`, selects the `rei` SilentSDDM variant,
+and stows this repo's small SDDM config:
 
 ```bash
 ./scripts/install-sddm.sh
+```
+
+Use another SilentSDDM variant by setting `SILENT_SDDM_CONFIG`:
+
+```bash
+SILENT_SDDM_CONFIG=default ./scripts/install-sddm.sh
 ```
 
 It configures:
 
 ```text
 /etc/sddm.conf.d/10-theme.conf
-/etc/sddm.conf.d/20-virtual-keyboard.conf
 /usr/share/sddm/themes/silent/
 ```
 
-The current theme is `silent` with `qtvirtualkeyboard` enabled.
+The SDDM theme name stays `silent`; the selected SilentSDDM style is `rei`.
 
 ## Local Setup
 

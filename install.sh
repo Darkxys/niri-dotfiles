@@ -29,7 +29,6 @@ config_targets=(
 	".config/environment.d"
 	".config/fcitx5"
 	".config/prompt"
-	".config/mimeapps.list"
 	"Pictures/wallpapers"
 )
 
