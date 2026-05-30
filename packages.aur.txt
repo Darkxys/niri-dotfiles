@@ -3,3 +3,5 @@
 
 # Your swaylock config uses swaylock-effects-only options like blur/vignette.
 swaylock-effects
+wlogout
+bibata-cursor-theme

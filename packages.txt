@@ -15,7 +15,6 @@ alacritty
 fish
 fuzzel
 mako
-wlogout
 swappy
 swaybg
 wlsunset
@@ -66,4 +65,3 @@ ttf-jetbrains-mono-nerd
 noto-fonts
 noto-fonts-emoji
 ttf-font-awesome
-bibata-cursor-theme
