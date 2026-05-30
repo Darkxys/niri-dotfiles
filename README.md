@@ -10,7 +10,7 @@ editing either path updates the same files.
 
 - Niri, Waybar, Alacritty, Fish, Fuzzel, Mako, Swaylock, Wlogout, Swappy
 - SDDM `silent` login theme
-- Fastfetch, Btop, Cava, MPV, Yazi, Lazygit, Tmux
+- Fastfetch, Btop, Cava, MPV, Yazi, Lazygit
 - GTK 3/4, Fcitx5, Starship prompt, MIME defaults
 - Wallpapers: `bg.jpg`, `purple-horizon.jpg`
 
@@ -57,28 +57,58 @@ The installer also fetches `Fausto-Korpsvart/Tokyonight-GTK-Theme`, installs the
 `Tokyonight-BL-LB-Dark-Storm` GTK theme to `~/.themes`, and applies the matching
 GTK settings for themed dialogs. Set `SKIP_GTK_THEME=1` to skip that step.
 
-## Day To Day
+## Keybindings
 
-Check whether a live config points into the repo:
+The main Niri keybindings live in:
 
-```bash
-readlink -f ~/.config/fish/config.fish
+```text
+~/.config/niri/keybinds.kdl
 ```
 
-Save changes:
+`Mod` means `Super` in a normal Niri session. Show the shortcut overlay with
+`Mod+Shift+/`.
+
+Common binds:
+
+| Key | Action |
+| --- | --- |
+| `Mod+Return` | Open Alacritty |
+| `Mod+Space` | Open Fuzzel |
+| `Super+Alt+L` | Lock screen |
+| `Mod+T` | Open Wlogout |
+| `Mod+C` | Open editor |
+| `Mod+B` | Open browser |
+| `Mod+N` | Open notes |
+| `Mod+E` | Open Yazi |
+| `Mod+S` | Open SSH picker |
+| `Mod+Q` | Close focused window |
+| `Mod+O` | Toggle overview |
+| `Mod+H/J/K/L` | Move focus |
+| `Mod+Ctrl+H/J/K/L` | Move window/column |
+| `Mod+1`-`Mod+9` | Focus workspace |
+| `Mod+Ctrl+1`-`Mod+Ctrl+9` | Move column to workspace |
+| `Mod+R` | Cycle column widths |
+| `Mod+F` | Maximize column |
+| `Mod+Shift+F` | Toggle fullscreen |
+| `Mod+V` | Toggle floating |
+| `Print` | Area screenshot |
+| `Ctrl+Print` | Screen screenshot |
+| `Alt+Print` | Window screenshot |
+| `Mod+Shift+E` | Quit Niri |
+
+Editor, browser, and notes are local-friendly. Override them without dirtying
+the repo:
 
 ```bash
-cd ~/dotfiles
-git status
-git add .
-git commit -m "Update config"
-git push
+cp ~/.config/niri/apps.env.example ~/.config/niri/apps.env
 ```
 
-Re-apply links after moving files around:
+Then edit `~/.config/niri/apps.env`:
 
-```bash
-./scripts/restow.sh
+```sh
+NIRI_APP_EDITOR='codium'
+NIRI_APP_BROWSER='firefox'
+NIRI_APP_NOTES='obsidian'
 ```
 
 ## SDDM
@@ -137,32 +167,3 @@ WLSUNSET_LON=
 
 Put session-wide values in `~/.config/environment.d/rice-local.conf`, then log
 out and back in.
-
-App keybinds for editor, browser, and notes go through:
-
-```text
-~/.config/niri/scripts/launch-app.sh
-```
-
-To override them without dirtying the repo, copy:
-
-```bash
-cp ~/.config/niri/apps.env.example ~/.config/niri/apps.env
-```
-
-Then edit `apps.env`, for example:
-
-```sh
-NIRI_APP_EDITOR='codium'
-NIRI_APP_BROWSER='firefox'
-NIRI_APP_NOTES='obsidian'
-```
-
-## Publish
-
-```bash
-gh repo create dotfiles --private --source=. --remote=origin --push
-```
-
-Audit before making it public: hostnames, secrets, tokens, SSH aliases, and
-anything too machine-specific.

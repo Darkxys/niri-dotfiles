@@ -36,7 +36,6 @@ config_targets=(
 	".config/mpv"
 	".config/yazi"
 	".config/lazygit"
-	".config/tmux"
 	".config/gtk-3.0"
 	".config/gtk-4.0"
 	".config/environment.d"
@@ -124,7 +123,7 @@ make_executable() {
 		return
 	fi
 
-	find "$repo_dir/.config/niri" "$repo_dir/.config/waybar" "$repo_dir/.config/tmux" \
+	find "$repo_dir/.config/niri" "$repo_dir/.config/waybar" \
 		-type f \( -name '*.sh' -o -name '*.py' \) -exec chmod +x {} +
 	chmod +x "$repo_dir/install.sh" "$repo_dir/scripts/install-packages.sh" "$repo_dir/scripts/restow.sh"
 }
