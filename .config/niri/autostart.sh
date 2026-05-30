@@ -1,0 +1,35 @@
+#!/bin/sh
+
+config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
+
+command_exists() {
+	command -v "$1" >/dev/null 2>&1
+}
+
+# Cursor theme for niri / Wayland / Xwayland apps.
+export XCURSOR_THEME="${XCURSOR_THEME:-Bibata-Modern-Classic}"
+export XCURSOR_SIZE="${XCURSOR_SIZE:-24}"
+export XCURSOR_PATH="${XCURSOR_PATH:-$config_home/niri:$HOME/.icons:$HOME/.local/share/icons:/usr/share/icons}"
+
+wallpaper="${NIRI_WALLPAPER:-$HOME/Pictures/wallpapers/bg.jpg}"
+if command_exists swaybg && [ -f "$wallpaper" ]; then
+	swaybg -i "$wallpaper" -m fill &
+fi
+
+command_exists mako && mako &
+command_exists wl-paste && command_exists cliphist && wl-paste --watch cliphist store &
+[ -x "$config_home/waybar/launch.sh" ] && "$config_home/waybar/launch.sh" &
+
+if command_exists wlsunset && [ -n "${WLSUNSET_LAT:-}" ] && [ -n "${WLSUNSET_LON:-}" ]; then
+	wlsunset -l "$WLSUNSET_LAT" -L "$WLSUNSET_LON" -t "${WLSUNSET_TEMP_NIGHT:-2500}" -T "${WLSUNSET_TEMP_DAY:-6200}" &
+fi
+
+for agent in \
+	/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 \
+	/usr/libexec/polkit-gnome-authentication-agent-1 \
+	/usr/lib/polkit-kde-authentication-agent-1; do
+	if [ -x "$agent" ]; then
+		"$agent" &
+		break
+	fi
+done

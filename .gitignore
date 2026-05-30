@@ -1,0 +1,20 @@
+.stow-local-ignore
+*.bak
+*.bak.*
+*.swp
+*.tmp
+*.pyc
+__pycache__/
+
+# Generated/runtime state.
+.config/waybar/config.runtime
+.config/fish/fish_variables
+.config/fcitx5/conf/cached_layouts
+.config/yazi/yazi.toml-*
+
+# Local machine overrides.
+.config/niri/outputs.local.kdl
+.config/niri/apps.env
+local/
+
+.env

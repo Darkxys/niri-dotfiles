@@ -1,0 +1,32 @@
+// Example desktop monitor layout from the original rice.
+// Copy the nodes you need into outputs.kdl and adjust names, modes, scale, and
+// positions for your hardware.
+
+output "DP-3" {
+    mode "2560x1440@164.847"
+    scale 1.0
+    transform "normal"
+    position x=5760 y=0
+}
+
+output "HDMI-A-1" {
+    mode "1920x1080@60.000"
+    scale 1.0
+    transform "normal"
+    position x=1920 y=72
+}
+
+output "DP-2" {
+    mode "1920x1080@74.973"
+    scale 1.0
+    transform "normal"
+    position x=3840 y=72
+}
+
+output "DP-1" {
+    mode "1920x1080@74.973"
+    scale 1.0
+    transform "normal"
+    position x=8320 y=72
+}
+

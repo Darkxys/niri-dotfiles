@@ -1,0 +1,67 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 34,
+  "spacing": 0,
+  "reload_style_on_change": true,
+  "include": [
+    "~/.config/waybar/modules/launcher.jsonc",
+    "~/.config/waybar/modules/workspaces.jsonc",
+    "~/.config/waybar/modules/clock.jsonc",
+    "~/.config/waybar/modules/player.jsonc",
+    "~/.config/waybar/modules/visualizer.jsonc",
+    "~/.config/waybar/modules/pulseaudio.jsonc",
+    "~/.config/waybar/modules/network.jsonc",
+    "~/.config/waybar/modules/bluetooth.jsonc",
+    "~/.config/waybar/modules/clipboard.jsonc",
+    "~/.config/waybar/modules/notifications.jsonc",
+    "~/.config/waybar/modules/tray.jsonc",
+    "~/.config/waybar/modules/power.jsonc",
+    "~/.config/waybar/modules/cpu.jsonc",
+    "~/.config/waybar/modules/memory.jsonc",
+    "~/.config/waybar/modules/temperature.jsonc"
+    // "~/.config/waybar/modules/battery.jsonc",
+    // "~/.config/waybar/modules/backlight.jsonc",
+    // "~/.config/waybar/modules/idle_inhibitor.jsonc",
+    // "~/.config/waybar/modules/weather.jsonc",
+    // "~/.config/waybar/modules/updates.jsonc"
+    // "~/.config/waybar/modules/disk.jsonc",
+    // "~/.config/waybar/modules/keyboard.jsonc",
+    // "~/.config/waybar/modules/privacy.jsonc"
+  ],
+  
+  "modules-left": [
+    // "custom/launcher",
+    "niri/workspaces"
+  ],
+
+  "modules-center": [
+    "custom/player",
+    "clock"
+  ],
+
+  "modules-right": [
+    "tray",
+    "temperature",
+    "cpu",
+    "memory",
+    "pulseaudio",
+    // "network",
+    // "bluetooth",
+    "custom/clipboard",
+    "custom/notifications"
+    // "custom/power"
+  ],
+  
+  "niri/workspaces": {
+    "format": "{index}",
+    "on-click": "activate",
+    "all-outputs": false,
+    "active-only": false
+  },
+  "niri/window": {
+    "format": "{}",
+    "separate-outputs": true,
+    "max-length": 48
+  }
+}

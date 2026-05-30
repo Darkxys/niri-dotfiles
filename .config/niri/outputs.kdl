@@ -1,0 +1,37 @@
+// Default output profile.
+//
+// Keep this file generic for published dotfiles. Niri will auto-detect outputs
+// when no output nodes are active.
+//
+// To create a local profile:
+// 1. Run `niri msg outputs` inside a niri session.
+// 2. Copy an example from outputs.desktop.example.kdl or write your own output nodes.
+// 3. Restart niri.
+
+output "DP-3" {
+    mode "2560x1440@164.847"
+    scale 1.0
+    transform "normal"
+    position x=5760 y=0
+}
+
+output "HDMI-A-1" {
+    mode "1920x1080@60.000"
+    scale 1.0
+    transform "normal"
+    position x=1920 y=72
+}
+
+output "DP-2" {
+    mode "1920x1080@74.973"
+    scale 1.0
+    transform "normal"
+    position x=3840 y=72
+}
+
+output "DP-1" {
+    mode "1920x1080@74.973"
+    scale 1.0
+    transform "normal"
+    position x=8320 y=72
+}

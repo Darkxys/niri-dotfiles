@@ -1,0 +1,69 @@
+# Arch Linux repo packages for this rice.
+# Install with: ./scripts/install-packages.sh
+
+# Repo/install tooling
+git
+rsync
+stow
+
+# Niri desktop
+niri
+sddm
+xdg-desktop-portal
+waybar
+alacritty
+fish
+fuzzel
+mako
+wlogout
+swappy
+swaybg
+wlsunset
+wl-clipboard
+cliphist
+xdg-utils
+polkit-gnome
+gnome-keyring
+network-manager-applet
+qt6-svg
+qt6-virtualkeyboard
+qt6-multimedia-ffmpeg
+
+# Audio, media, brightness, and hardware controls
+pipewire
+pipewire-pulse
+wireplumber
+playerctl
+brightnessctl
+pavucontrol
+ydotool
+lm_sensors
+
+# CLI tools used by configs and scripts
+fastfetch
+btop
+cava
+mpv
+yazi
+lazygit
+jq
+curl
+python
+libnotify
+eza
+bat
+fzf
+
+# Input and IME
+fcitx5
+fcitx5-configtool
+fcitx5-gtk
+fcitx5-qt
+fcitx5-mozc
+
+# Fonts, icons, and cursor theme
+ttf-jetbrains-mono-nerd
+noto-fonts
+noto-fonts-emoji
+ttf-font-awesome
+bibata-cursor-theme

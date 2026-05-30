@@ -1,0 +1,5 @@
+# Optional AUR packages.
+# Installed with yay/paru when available.
+
+# Your swaylock config uses swaylock-effects-only options like blur/vignette.
+swaylock-effects
