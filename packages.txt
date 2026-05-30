@@ -10,6 +10,12 @@ stow
 niri
 sddm
 xdg-desktop-portal
+xdg-desktop-portal-gtk
+xdg-desktop-portal-gnome
+dconf
+sassc
+gtk-engine-murrine
+gnome-themes-extra
 waybar
 alacritty
 fish

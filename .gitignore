@@ -18,4 +18,4 @@ __pycache__/
 local/
 
 .env
-.config/rice-local.conf
+.config/environment.d/rice-local.conf

@@ -53,6 +53,10 @@ Package installation reads `packages.txt` and prefers `pacman`, then `yay`,
 then `paru`. Optional AUR packages live in `packages.aur.txt` and are installed
 with `yay` or `paru` when available.
 
+The installer also fetches `Fausto-Korpsvart/Tokyonight-GTK-Theme`, installs the
+`Tokyonight-BL-LB-Dark-Storm` GTK theme to `~/.themes`, and applies the matching
+GTK settings for themed dialogs. Set `SKIP_GTK_THEME=1` to skip that step.
+
 ## Day To Day
 
 Check whether a live config points into the repo:

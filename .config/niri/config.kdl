@@ -236,6 +236,9 @@ layout {
 
 // Set environment variables
 environment {
+  XDG_CURRENT_DESKTOP "niri"
+  XDG_SESSION_DESKTOP "niri"
+  DESKTOP_SESSION "niri"
   XCURSOR_THEME "Bibata-Modern-Classic"
   XCURSOR_SIZE "24"
 }
