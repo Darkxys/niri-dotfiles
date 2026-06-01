@@ -1,10 +1,17 @@
 #!/bin/sh
 
 config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
+local_env="$config_home/environment.d/rice-local.conf"
 
 command_exists() {
 	command -v "$1" >/dev/null 2>&1
 }
+
+if [ -r "$local_env" ]; then
+	set -a
+	. "$local_env"
+	set +a
+fi
 
 # Cursor theme for niri / Wayland / Xwayland apps.
 export XCURSOR_THEME="${XCURSOR_THEME:-Bibata-Modern-Classic}"
