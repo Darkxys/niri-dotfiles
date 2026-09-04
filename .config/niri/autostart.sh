@@ -48,3 +48,14 @@ for agent in \
 		break
 	fi
 done
+
+pentablet_script=/usr/lib/pentablet/PenTablet.sh
+if command_exists sleep && [ -x "$pentablet_script" ]; then
+	(
+		sleep 5
+		if command_exists pkill; then
+			pkill -x PenTablet 2>/dev/null || true
+		fi
+		exec "$pentablet_script" /mini
+	) >"$HOME/.cache/xppen-autostart.log" 2>&1 &
+fi

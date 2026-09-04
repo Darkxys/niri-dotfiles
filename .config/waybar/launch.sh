@@ -4,70 +4,27 @@ CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/waybar"
 BASE_CONFIG="$CONFIG_DIR/config.jsonc"
 RUNTIME_CONFIG="$CONFIG_DIR/config.runtime"
 
+command_exists() {
+	command -v "$1" >/dev/null 2>&1
+}
+
+command_exists python3 || exit 0
+command_exists waybar || exit 0
+
 if [ ! -f "$BASE_CONFIG" ]; then
 	BASE_CONFIG="$CONFIG_DIR/config"
 fi
 
-width=$(niri msg --json outputs 2>/dev/null | python3 -c "
+python3 - "$BASE_CONFIG" "$RUNTIME_CONFIG" <<'PY'
+import copy
 import json
+import shutil
+import subprocess
 import sys
 
-def logical_width(output):
-    logical = output.get('logical') or output.get('logical_size') or {}
-    if isinstance(logical, dict):
-        width = logical.get('width') or logical.get('w')
-        if isinstance(width, (int, float)):
-            return int(width)
-
-    mode = output.get('current_mode') or output.get('mode') or {}
-    if isinstance(mode, dict):
-        width = mode.get('width')
-        scale = output.get('scale')
-        if isinstance(width, (int, float)):
-            if isinstance(scale, (int, float)) and scale:
-                return int(width / scale)
-            return int(width)
-
-    width = output.get('width')
-    if isinstance(width, (int, float)):
-        return int(width)
-
-    return None
-
-try:
-    outputs = json.load(sys.stdin)
-except Exception:
-    outputs = []
-
-focused = next(
-    (
-        output for output in outputs
-        if output.get('is_focused') or output.get('focused') or output.get('focus')
-    ),
-    outputs[0] if outputs else None,
-)
-
-print(logical_width(focused) if focused else 1440)
-")
-
-if ! [[ "$width" =~ ^[0-9]+$ ]] || [ "$width" -eq 0 ]; then
-	width=1440
-fi
-
-margin=$(( width * 125 / 1000 ))
-min_bar_width=1080
-max_margin=$(( (width - min_bar_width) / 2 ))
-
-if [ "$max_margin" -lt 0 ]; then
-	max_margin=0
-fi
-
-if [ "$margin" -gt "$max_margin" ]; then
-	margin=$max_margin
-fi
-python3 - "$BASE_CONFIG" "$RUNTIME_CONFIG" "$margin" <<'PY'
-import json
-import sys
+DEFAULT_WIDTH = 1440
+MIN_BAR_WIDTH = 1750
+MARGIN_PER_MILLE = 125
 
 
 def strip_jsonc_comments(text: str) -> str:
@@ -125,18 +82,108 @@ def strip_jsonc_comments(text: str) -> str:
 
     return "".join(result)
 
-base_path, runtime_path, margin = sys.argv[1:4]
-margin = int(margin)
+
+def niri_outputs() -> list[tuple[str | None, dict]]:
+    if shutil.which("niri") is None:
+        return []
+
+    try:
+        result = subprocess.run(
+            ["niri", "msg", "--json", "outputs"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        outputs = json.loads(result.stdout)
+    except Exception:
+        return []
+
+    if isinstance(outputs, dict):
+        return [
+            (name, output)
+            for name, output in outputs.items()
+            if isinstance(output, dict)
+        ]
+
+    if isinstance(outputs, list):
+        return [
+            (output.get("name"), output)
+            for output in outputs
+            if isinstance(output, dict)
+        ]
+
+    return []
+
+
+def output_width(output: dict) -> int | None:
+    logical = output.get("logical") or output.get("logical_size") or {}
+    if isinstance(logical, dict):
+        width = logical.get("width") or logical.get("w")
+        if isinstance(width, (int, float)):
+            return int(width)
+
+    mode = output.get("current_mode") or output.get("mode") or {}
+    modes = output.get("modes")
+    if isinstance(mode, int) and isinstance(modes, list) and 0 <= mode < len(modes):
+        mode = modes[mode]
+
+    if isinstance(mode, dict):
+        width = mode.get("width")
+        scale = output.get("scale")
+        if isinstance(width, (int, float)):
+            if isinstance(scale, (int, float)) and scale:
+                return int(width / scale)
+            return int(width)
+
+    width = output.get("width")
+    if isinstance(width, (int, float)):
+        return int(width)
+
+    return None
+
+
+def margin_for_width(width: int | None) -> int:
+    if not isinstance(width, int) or width <= 0:
+        width = DEFAULT_WIDTH
+
+    margin = width * MARGIN_PER_MILLE // 1000
+    max_margin = (width - MIN_BAR_WIDTH) // 2
+    if max_margin < 0:
+        max_margin = 0
+
+    return min(margin, max_margin)
+
+
+def config_for_output(base_config: dict, name: str | None, output: dict) -> dict:
+    config = copy.deepcopy(base_config)
+    margin = margin_for_width(output_width(output))
+
+    config["margin-top"] = 8
+    config["margin-left"] = margin
+    config["margin-right"] = margin
+
+    if name:
+        config["output"] = name
+
+    return config
+
+
+base_path, runtime_path = sys.argv[1:3]
 
 with open(base_path, encoding="utf-8") as f:
-    config = json.loads(strip_jsonc_comments(f.read()))
+    base_config = json.loads(strip_jsonc_comments(f.read()))
 
-config["margin-top"] = 8
-config["margin-left"] = margin
-config["margin-right"] = margin
+outputs = niri_outputs()
+if outputs:
+    runtime_config = [
+        config_for_output(base_config, name, output)
+        for name, output in outputs
+    ]
+else:
+    runtime_config = config_for_output(base_config, None, {})
 
 with open(runtime_path, "w", encoding="utf-8") as f:
-    json.dump(config, f, indent="\t")
+    json.dump(runtime_config, f, indent="\t")
     f.write("\n")
 PY
 

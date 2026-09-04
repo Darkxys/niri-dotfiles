@@ -1,6 +1,13 @@
 // keybinds managed by niri-settings. Consider moving existing binds here.
 
 binds {
+    Mod+F11 {
+        spawn-sh "command -v niri >/dev/null 2>&1 && command -v sleep >/dev/null 2>&1 && command -v wtype >/dev/null 2>&1 || exit 0; niri msg action focus-monitor-right; niri msg action focus-monitor-right; sleep 0.05; wtype -P left -p left; sleep 0.05; niri msg action focus-monitor-left; niri msg action focus-monitor-left"
+    }
+
+    Mod+F12 {
+        spawn-sh "command -v niri >/dev/null 2>&1 && command -v sleep >/dev/null 2>&1 && command -v wtype >/dev/null 2>&1 || exit 0; niri msg action focus-monitor-right; niri msg action focus-monitor-right; sleep 0.05; wtype -P right -p right; sleep 0.05; niri msg action focus-monitor-left; niri msg action focus-monitor-left"
+    }
     // Keys consist of modifiers separated by + signs, followed by an XKB key name
     // in the end. To find an XKB name for a particular key, you may use a program
     // like wev.
